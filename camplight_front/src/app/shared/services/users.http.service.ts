@@ -10,29 +10,27 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class UserHttpService {
-  public readonly apiUrl = 'http://localhost:3000/users'; // Update this to match your API endpoint
+  public readonly apiUrl = 'http://localhost:3000/users'; 
   private _snackBar = inject(MatSnackBar);
 
   constructor(private http: HttpClient) {}
 
-  // Create a new user
   createUser(createUserDto: UserCreateDto): Observable<UserDto> {
     return this.http.post<UserDto>(`${this.apiUrl}`, createUserDto).pipe(
       catchError((error) => {
         console.error('Error creating user:', error);
         this._snackBar.open(`Error creating user: ${error.message}`, undefined, {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
+          duration: 3000, 
+          panelClass: ['snackbar-error'], 
         });
         throw error;
       })
     );
   }
 
-  // Get all users with pagination and optional filters
   getUsers(
-    page = 1,
-    limit = 10,
+    page: number = 1,
+    limit: number = 10,
     filters?: Partial<UserDto>
   ): Observable<{ data: UserDto[]; total: number }> {
     let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
@@ -51,50 +49,47 @@ export class UserHttpService {
       catchError((error) => {
         console.error('Error fetching users:', error);
         this._snackBar.open(`Error fetching users: ${error.message}`, undefined, {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
+          duration: 3000, 
+          panelClass: ['snackbar-error'], 
         });
         throw error;
       })
     );
   }
 
-  // Get a user by ID
   getUserById(id: string): Observable<UserDto> {
     return this.http.get<UserDto>(`${this.apiUrl}/${id}`).pipe(
       catchError((error) => {
         console.error(`Error fetching user with ID ${id}:`, error);
         this._snackBar.open(`Error fetching user with ID ${id}: ${error.message}`, undefined, {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
+          duration: 3000, 
+          panelClass: ['snackbar-error'], 
         });
         throw error;
       })
     );
   }
 
-  // Update a user by ID
   updateUser(id: string, updateUserDto: UserCreateDto): Observable<UserDto> {
     return this.http.put<UserDto>(`${this.apiUrl}/${id}`, updateUserDto).pipe(
       catchError((error) => {
         console.error(`Error updating user with ID ${id}:`, error);
         this._snackBar.open(`Error updating user with ID ${id}: ${error.message}`, undefined, {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
+          duration: 3000, 
+          panelClass: ['snackbar-error'], 
         });
         throw error;
       })
     );
   }
 
-  // Delete a user by ID
   deleteUser(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError((error) => {
         console.error(`Error deleting user with ID ${id}:`, error);
         this._snackBar.open(`Error deleting user with ID ${id}: ${error.message}`, undefined, {
-          duration: 3000,
-          panelClass: ['snackbar-error'],
+          duration: 3000, 
+          panelClass: ['snackbar-error'], 
         });
         throw error;
       })
