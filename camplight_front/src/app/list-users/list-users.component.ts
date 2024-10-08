@@ -59,7 +59,9 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
-    this.dataSource.paginator = this.paginator;
+  }
+
+  ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
   
@@ -85,6 +87,7 @@ export class UserListComponent implements OnInit {
         this.totalItems = response.total;  // Set the total items count for the paginator
         this.currentPage = 1;
         this.paginator.pageIndex = 0;
+        this.dataSource.sort = this.sort;
       }
     );
   }
@@ -94,9 +97,9 @@ export class UserListComponent implements OnInit {
   loadUsers(): void {
     this.httpSvc.getUsers().subscribe(
       (response) => {
-        this.allUsers = response.data;
-        this.dataSource.data = [...this.allUsers];
+        this.dataSource.data = response.data;
         this.totalItems = response.total;  // Set the total items count for the paginator
+        this.dataSource.sort = this.sort;
       }
     );
   }
@@ -109,6 +112,7 @@ export class UserListComponent implements OnInit {
       (response) => {
         this.dataSource.data = response.data;
         this.totalItems = response.total;  // Set the total items count for the paginator
+        this.dataSource.sort = this.sort;
       }
     );
   }
