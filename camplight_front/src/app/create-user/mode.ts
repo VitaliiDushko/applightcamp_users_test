@@ -1,4 +1,4 @@
 export enum Mode {
-    Create = 1, 
-    Update = 2
+  Create = 1,
+  Update = 2,
 }

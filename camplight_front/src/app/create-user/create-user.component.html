@@ -1,37 +1,37 @@
-<h2 mat-dialog-title>{{getTitle()}} User</h2>
+<h2 mat-dialog-title>{{ getTitle() }} User</h2>
 <mat-dialog-content>
   <form [formGroup]="form" (ngSubmit)="submit()">
     <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name" />
-        @if (getCtrlErrors('name','required')) {
-          <mat-error>Name is required.</mat-error>
-        }
-        @if (getCtrlErrors('name','pattern')) {
-          <mat-error>Name must be at least 1 non empty character long.</mat-error>
-        }
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" />
-        @if (getCtrlErrors('email','required')) {
-          <mat-error>Email is required.</mat-error>
-        }
-        @if (getCtrlErrors('email','invalidEmail')) {
-          <mat-error>Email must be valid.</mat-error>
-        }
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Phone Number</mat-label>
-        <input matInput formControlName="phone_number" />
-        @if (getCtrlErrors('phone_number','required')) {
-          <mat-error>Phone is required.</mat-error>
-        }
-        @if (getCtrlErrors('phone_number','invalidphone_number')) {
-          <mat-error>Phone must be valid.</mat-error>
-        }
-      </mat-form-field>
-</form>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+      @if (getCtrlErrors('name', 'required')) {
+        <mat-error>Name is required.</mat-error>
+      }
+      @if (getCtrlErrors('name', 'pattern')) {
+        <mat-error>Name must be at least 1 non empty character long.</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+      @if (getCtrlErrors('email', 'required')) {
+        <mat-error>Email is required.</mat-error>
+      }
+      @if (getCtrlErrors('email', 'invalidEmail')) {
+        <mat-error>Email must be valid.</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phone_number" />
+      @if (getCtrlErrors('phone_number', 'required')) {
+        <mat-error>Phone is required.</mat-error>
+      }
+      @if (getCtrlErrors('phone_number', 'invalidphone_number')) {
+        <mat-error>Phone must be valid.</mat-error>
+      }
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button type="submit" mat-button [disabled]="form.invalid" (click)="submit()">Submit</button>

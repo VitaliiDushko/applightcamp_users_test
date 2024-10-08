@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { Component, inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
@@ -14,7 +14,6 @@ import { CreateUserComponent } from '../create-user/create-user.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Mode } from '../create-user/mode';
 
-
 @Component({
   standalone: true,
   imports: [
@@ -27,14 +26,13 @@ import { Mode } from '../create-user/mode';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatSnackBarModule 
+    MatSnackBarModule,
   ],
   selector: 'app-user-list',
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.scss'],
 })
-export class UserListComponent implements OnInit {
-
+export class UserListComponent implements OnInit, AfterViewInit {
   readonly dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['name', 'email', 'phone_number', 'actions'];
@@ -42,19 +40,21 @@ export class UserListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  
-  filterValue: string = '';
-  totalItems: number = 0;  // Store total number of items from backend
-  pageSize: number = 10;  // Default page size
-  currentPage: number = 1;  // Track current page
+
+  filterValue = '';
+  totalItems = 0;
+  pageSize = 10;
+  currentPage = 1;
 
   currentFilter: Partial<UserDto> = {};
 
-  allUsers: UserDto[] = []; // Store all users
-  filteredUsers: UserDto[] = []; // Store filtered users
+  filteredUsers: UserDto[] = [];
 
   constructor(private httpSvc: UserHttpService) {
-    this.dataSource.filterPredicate = (user: UserDto, filter: string) => user.email?.includes(filter) || user.name?.includes(filter) || user.phone_number?.includes(filter);
+    this.dataSource.filterPredicate = (user: UserDto, filter: string) =>
+      user.email?.includes(filter) ||
+      user.name?.includes(filter) ||
+      user.phone_number?.includes(filter);
   }
 
   ngOnInit(): void {
@@ -64,7 +64,7 @@ export class UserListComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
-  
+
   getValue(event: Event): string {
     return (event.target as HTMLInputElement).value;
   }
@@ -79,52 +79,40 @@ export class UserListComponent implements OnInit {
     this.currentFilter.phone_number = phone;
   }
 
-   // Update the table data according to the current page and page size
-   searchWithFilter(page: number = 1): void {
-    this.httpSvc.getUsers(page, this.pageSize, this.currentFilter).subscribe(
-      (response) => {
-        this.dataSource.data = response.data;
-        this.totalItems = response.total;  // Set the total items count for the paginator
-        this.currentPage = 1;
-        this.paginator.pageIndex = 0;
-        this.dataSource.sort = this.sort;
-      }
-    );
+  searchWithFilter(page = 1): void {
+    this.httpSvc.getUsers(page, this.pageSize, this.currentFilter).subscribe((response) => {
+      this.dataSource.data = response.data;
+      this.totalItems = response.total;
+      this.paginator.pageIndex = 0;
+      this.dataSource.sort = this.sort;
+    });
   }
 
-
-  // Fetch users from the service
   loadUsers(): void {
-    this.httpSvc.getUsers().subscribe(
-      (response) => {
-        this.dataSource.data = response.data;
-        this.totalItems = response.total;  // Set the total items count for the paginator
-        this.dataSource.sort = this.sort;
-      }
-    );
+    this.httpSvc.getUsers().subscribe((response) => {
+      this.dataSource.data = response.data;
+      this.totalItems = response.total;
+      this.dataSource.sort = this.sort;
+    });
   }
 
-  // Handle page changes from paginator
-  onPageChange(event: any): void {
+  onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex + 1;
     this.pageSize = event.pageSize;
-    this.httpSvc.getUsers(this.currentPage, this.pageSize, this.currentFilter).subscribe(
-      (response) => {
+    this.httpSvc
+      .getUsers(this.currentPage, this.pageSize, this.currentFilter)
+      .subscribe((response) => {
         this.dataSource.data = response.data;
-        this.totalItems = response.total;  // Set the total items count for the paginator
+        this.totalItems = response.total; // Set the total items count for the paginator
         this.dataSource.sort = this.sort;
-      }
-    );
+      });
   }
-
 
   deleteUser(id: string): void {
     if (confirm('Are you sure you want to delete this user?')) {
-      this.httpSvc.deleteUser(id).subscribe(
-        () => {
-          this.searchWithFilter(this.currentPage); 
-        }
-      );
+      this.httpSvc.deleteUser(id).subscribe(() => {
+        this.searchWithFilter(this.currentPage);
+      });
     }
   }
 
@@ -132,18 +120,18 @@ export class UserListComponent implements OnInit {
     const dialogRef = this.dialog.open(CreateUserComponent, {
       data: {
         mode: Mode.Update,
-        user: user
-      }
+        user: user,
+      },
     });
-    dialogRef.afterClosed().subscribe(res => res && this.searchWithFilter(this.currentPage,))
+    dialogRef.afterClosed().subscribe((res) => res && this.searchWithFilter(this.currentPage));
   }
 
   createUser() {
     const dialogRef = this.dialog.open(CreateUserComponent, {
       data: {
-        mode: Mode.Create
-      }
+        mode: Mode.Create,
+      },
     });
-    dialogRef.afterClosed().subscribe(res => res && this.searchWithFilter(this.currentPage))
+    dialogRef.afterClosed().subscribe((res) => res && this.searchWithFilter(this.currentPage));
   }
 }

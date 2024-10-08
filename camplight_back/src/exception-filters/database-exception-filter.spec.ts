@@ -12,20 +12,16 @@ describe('DatabaseExceptionFilter', () => {
   let filter: DatabaseExceptionFilter;
   let mockLogger: Logger;
 
-  // Mocking the necessary objects
   const mockResponse = mock<Response>();
   const mockRequest = mock<Request>();
   const mockHost = mock<ArgumentsHost>();
 
   beforeEach(() => {
-    // Mock the logger and override the error method
     mockLogger = new Logger();
     jest.spyOn(mockLogger, 'error').mockImplementation();
 
-    // Create the filter instance
     filter = new DatabaseExceptionFilter();
 
-    // Mock the request and response
     mockHost.switchToHttp.mockReturnValue({
       getRequest: () => mockRequest,
       getResponse: () => mockResponse,
@@ -35,7 +31,6 @@ describe('DatabaseExceptionFilter', () => {
     mockResponse.status.mockReturnThis();
     mockResponse.json.mockReturnThis();
 
-    // Override the logger in the filter with the mocked logger
     (filter as any).logger = mockLogger;
   });
 
@@ -44,10 +39,8 @@ describe('DatabaseExceptionFilter', () => {
 
     filter.catch(error, mockHost);
 
-    // Verify the logger error method was called
     expect(mockLogger.error).toHaveBeenCalledWith(error.message, error);
 
-    // Verify that the response status and json were called correctly
     expect(mockResponse.status).toHaveBeenCalledWith(
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
@@ -65,13 +58,11 @@ describe('DatabaseExceptionFilter', () => {
 
     filter.catch(httpException, mockHost);
 
-    // Verify the logger error method was called
     expect(mockLogger.error).toHaveBeenCalledWith(
       httpException.message,
       httpException,
     );
 
-    // Verify that the response status and json were called correctly
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
     expect(mockResponse.json).toHaveBeenCalledWith({
       statusCode: HttpStatus.FORBIDDEN,
