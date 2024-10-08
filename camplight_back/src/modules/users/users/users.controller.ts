@@ -47,9 +47,6 @@ export class UsersController {
     @Query() query: FindUsersQuery,
   ): Promise<{ data: UserDto[]; total: number }> {
     const users = await this.userService.find(query);
-    if (users.data?.length < 1) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
     return users;
   }
 

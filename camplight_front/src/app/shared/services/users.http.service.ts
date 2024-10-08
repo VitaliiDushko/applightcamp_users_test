@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class UserHttpService {
-  public readonly apiUrl = 'http://localhost:3000/users'; 
+  public readonly apiUrl = 'http://localhost:3000/users';
   private _snackBar = inject(MatSnackBar);
 
   constructor(private http: HttpClient) {}
@@ -20,8 +20,8 @@ export class UserHttpService {
       catchError((error) => {
         console.error('Error creating user:', error);
         this._snackBar.open(`Error creating user: ${error.message}`, undefined, {
-          duration: 3000, 
-          panelClass: ['snackbar-error'], 
+          duration: 3000,
+          panelClass: ['snackbar-error'],
         });
         throw error;
       })
@@ -29,8 +29,8 @@ export class UserHttpService {
   }
 
   getUsers(
-    page: number = 1,
-    limit: number = 10,
+    page = 1,
+    limit = 10,
     filters?: Partial<UserDto>
   ): Observable<{ data: UserDto[]; total: number }> {
     let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
@@ -49,8 +49,8 @@ export class UserHttpService {
       catchError((error) => {
         console.error('Error fetching users:', error);
         this._snackBar.open(`Error fetching users: ${error.message}`, undefined, {
-          duration: 3000, 
-          panelClass: ['snackbar-error'], 
+          duration: 3000,
+          panelClass: ['snackbar-error'],
         });
         throw error;
       })
@@ -62,8 +62,8 @@ export class UserHttpService {
       catchError((error) => {
         console.error(`Error fetching user with ID ${id}:`, error);
         this._snackBar.open(`Error fetching user with ID ${id}: ${error.message}`, undefined, {
-          duration: 3000, 
-          panelClass: ['snackbar-error'], 
+          duration: 3000,
+          panelClass: ['snackbar-error'],
         });
         throw error;
       })
@@ -75,8 +75,8 @@ export class UserHttpService {
       catchError((error) => {
         console.error(`Error updating user with ID ${id}:`, error);
         this._snackBar.open(`Error updating user with ID ${id}: ${error.message}`, undefined, {
-          duration: 3000, 
-          panelClass: ['snackbar-error'], 
+          duration: 3000,
+          panelClass: ['snackbar-error'],
         });
         throw error;
       })
@@ -88,8 +88,8 @@ export class UserHttpService {
       catchError((error) => {
         console.error(`Error deleting user with ID ${id}:`, error);
         this._snackBar.open(`Error deleting user with ID ${id}: ${error.message}`, undefined, {
-          duration: 3000, 
-          panelClass: ['snackbar-error'], 
+          duration: 3000,
+          panelClass: ['snackbar-error'],
         });
         throw error;
       })

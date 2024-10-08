@@ -74,16 +74,6 @@ describe('UsersController', () => {
       expect(service.find).toHaveBeenCalledWith(query);
       expect(result).toEqual({ data: mockUsers, total: 1 });
     });
-
-    it('should throw 404 if no users found', async () => {
-      const query: FindUsersQuery = { page: 1, limit: 10 };
-
-      mockUsersService.find.mockResolvedValue({ data: [], total: 0 });
-
-      await expect(controller.find(query)).rejects.toThrow(
-        new HttpException('User not found', HttpStatus.NOT_FOUND),
-      );
-    });
   });
 
   describe('findOne', () => {
