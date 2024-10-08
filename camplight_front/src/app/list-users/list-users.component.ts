@@ -83,7 +83,6 @@ export class UserListComponent implements OnInit, AfterViewInit {
     this.httpSvc.getUsers(page, this.pageSize, this.currentFilter).subscribe((response) => {
       this.dataSource.data = response.data;
       this.totalItems = response.total;
-      this.paginator.pageIndex = 0;
       this.dataSource.sort = this.sort;
     });
   }
@@ -111,7 +110,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   deleteUser(id: string): void {
     if (confirm('Are you sure you want to delete this user?')) {
       this.httpSvc.deleteUser(id).subscribe(() => {
-        this.searchWithFilter(this.currentPage);
+        this.searchWithFilter(this.paginator.pageIndex + 1);
       });
     }
   }
@@ -123,7 +122,9 @@ export class UserListComponent implements OnInit, AfterViewInit {
         user: user,
       },
     });
-    dialogRef.afterClosed().subscribe((res) => res && this.searchWithFilter(this.currentPage));
+    dialogRef
+      .afterClosed()
+      .subscribe((res) => res && this.searchWithFilter(this.paginator.pageIndex + 1));
   }
 
   createUser() {
@@ -132,6 +133,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
         mode: Mode.Create,
       },
     });
-    dialogRef.afterClosed().subscribe((res) => res && this.searchWithFilter(this.currentPage));
+    dialogRef
+      .afterClosed()
+      .subscribe((res) => res && this.searchWithFilter(this.paginator.pageIndex + 1));
   }
 }

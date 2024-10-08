@@ -13,6 +13,8 @@ describe('UsersService', () => {
   let service: UsersService;
   let repository: Repository<UserEntity>;
 
+  const getManyAndCount = jest.fn();
+
   const mockUserRepository = {
     save: jest.fn(),
     findOne: jest.fn(),
@@ -21,7 +23,7 @@ describe('UsersService', () => {
       andWhere: jest.fn().mockReturnThis(),
       skip: jest.fn().mockReturnThis(),
       take: jest.fn().mockReturnThis(),
-      getManyAndCount: jest.fn(),
+      getManyAndCount: getManyAndCount,
     })),
   };
 
@@ -86,7 +88,7 @@ describe('UsersService', () => {
   describe('find', () => {
     it('should return paginated users with filters', async () => {
       const filters: FindUsersQuery = { name: 'John Doe' };
-      const mockData = [mockUser];
+      const mockData = [mockUser, mockUser, mockUser];
       const mockTotal = 1;
       mockUserRepository
         .createQueryBuilder()
