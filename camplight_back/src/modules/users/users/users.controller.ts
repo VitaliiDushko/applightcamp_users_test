@@ -47,6 +47,24 @@ export class UsersController {
     @Query() query: FindUsersQuery,
   ): Promise<{ data: UserDto[]; total: number }> {
     const users = await this.userService.find(query);
+    if (users.data?.length > 0) {
+      users.data.sort((a, b) => {
+        // Sort by name
+        const nameComparison = a.name.localeCompare(b.name);
+        if (nameComparison !== 0) {
+          return nameComparison;
+        }
+
+        // If names are equal, sort by email
+        const emailComparison = a.email.localeCompare(b.email);
+        if (emailComparison !== 0) {
+          return emailComparison;
+        }
+
+        // If both name and email are equal, sort by phone number
+        return a.phone_number.localeCompare(b.phone_number);
+      });
+    }
     return users;
   }
 
