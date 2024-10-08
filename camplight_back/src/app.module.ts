@@ -9,15 +9,15 @@ import { UsersModule } from './modules/users/users/users.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'Vitalia1507',
-      database: 'camplight',
-      synchronize: true, // Enable this for automatic schema sync (development only)
-      retryAttempts: 50, // Number of retry attempts if connection fails
-      retryDelay: 3000, // Delay between retries (in milliseconds)
-      // Enable verbose logging
+      host: process.env.POSTGRES_HOST,
+      port: parseInt(process.env.POSTGRES_PORT, 10),
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      autoLoadEntities: true,
+      synchronize: true,
+      retryAttempts: 50,
+      retryDelay: 3000,
       logging: ['query', 'error', 'schema', 'warn', 'info', 'log'],
       entities: [UserEntity],
     }),

@@ -68,7 +68,11 @@ export class CreateUserComponent {
     if(this.data.mode == Mode.Create) {
       this.httpSvc.createUser(this.form.value).subscribe({
         next: u => { 
-          this._snackBar.open(`user with id ${u.id} was created`)
+          
+          this._snackBar.open(`user with id ${u.id} was created`,undefined, {
+            duration: 3000, 
+            panelClass: ['snackbar-success'],
+          })
           this.dialogRef.close(u.id);
         },
         error: () => this.dialogRef.close()
@@ -76,7 +80,10 @@ export class CreateUserComponent {
     } else {
       this.httpSvc.updateUser(this.data.user.id, this.form.value).subscribe({
         next: u => { 
-          this._snackBar.open(`user with id ${u.id} was updated`)
+          this._snackBar.open(`user with id ${u.id} was updated`,undefined, {
+            duration: 3000, 
+            panelClass: ['snackbar-success'], 
+          })
           this.dialogRef.close(u.id);
         },
         error: () => this.dialogRef.close()

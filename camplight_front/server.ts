@@ -9,7 +9,7 @@ import bootstrap from './src/main.server';
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
+  const browserDistFolder = resolve(serverDistFolder);
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine();
@@ -17,12 +17,10 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
-  server.get('**', express.static(browserDistFolder, {
+
+  // Serve static files from /browser folder BEFORE routing to the Angular engine
+  server.use(express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html',
   }));
 
   // All regular routes use the Angular engine

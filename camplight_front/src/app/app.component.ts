@@ -22,5 +22,5 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'camplight_application_test_front';
+  title = 'camplight_front';
 }

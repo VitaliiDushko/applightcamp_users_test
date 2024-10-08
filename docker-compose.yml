@@ -1,0 +1,48 @@
+services:
+  # PostgreSQL Service
+  postgres-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: camplight
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # NestJS Service (Backend)
+  nestjs-backend:
+    build: ./camplight_back
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: postgres-db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: camplight
+    depends_on:
+      - postgres-db
+    networks:
+      - app-network
+
+  # Angular Service (Frontend)
+  angular-frontend:
+    build: ./camplight_front
+    ports:
+      - "4000:4000"
+    depends_on:
+      - nestjs-backend
+    networks:
+      - app-network
+
+# Define volumes for persistence
+volumes:
+  postgres-data:
+
+# Define the network for communication between services
+networks:
+  app-network:

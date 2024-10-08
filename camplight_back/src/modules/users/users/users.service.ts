@@ -49,7 +49,10 @@ export class UsersService {
         phone_number: `%${query.phone_number}%`,
       });
     }
-    queryBuilder.skip((query.page - 1) * query.limit).take(query.limit);
+
+    if (query.page && query.limit) {
+      queryBuilder.skip((query.page - 1) * query.limit).take(query.limit);
+    }
 
     let res;
     try {

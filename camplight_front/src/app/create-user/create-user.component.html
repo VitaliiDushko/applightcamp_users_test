@@ -17,7 +17,7 @@
         @if (getCtrlErrors('email','required')) {
           <mat-error>Email is required.</mat-error>
         }
-        @if (getCtrlErrors('email','email')) {
+        @if (getCtrlErrors('email','invalidEmail')) {
           <mat-error>Email must be valid.</mat-error>
         }
       </mat-form-field>
@@ -27,7 +27,7 @@
         @if (getCtrlErrors('phone_number','required')) {
           <mat-error>Phone is required.</mat-error>
         }
-        @if (getCtrlErrors('phone_number','phone_number')) {
+        @if (getCtrlErrors('phone_number','invalidphone_number')) {
           <mat-error>Phone must be valid.</mat-error>
         }
       </mat-form-field>

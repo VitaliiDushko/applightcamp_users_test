@@ -17,12 +17,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
   /* styles.scss or component.scss */
 .snackbar-success {
-    background-color: #4caf50; /* Green for success */
-    color: white;
+    background-color: #4caf50 !important; /* Green for success */
+    color: white !important;
 }
   
 .snackbar-error {
-    background-color: #f44336; /* Red for error */
-    color: white;
+    background-color: #f44336 !important; /* Red for error */
+    color: white !important;
 }
   
